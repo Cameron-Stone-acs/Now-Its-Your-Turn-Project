@@ -1,16 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
-using System.Threading.Tasks.Dataflow;
 using UnityEngine;
 
 public class GroundCheck : MonoBehaviour
 {
     public bool isGrounded;
-    public GameObject Player;
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider collision)
     {
-        Transform.position(new Vector3(Player.transform.x, Player.transform.y - 0.5, Player.transform.z));
+        if (!collision.CompareTag("Player")) isGrounded = true;
+    }
+    private void OnTriggerExit(Collider collision)
+    {
+        if (!collision.CompareTag("Player")) isGrounded = false;
     }
 }

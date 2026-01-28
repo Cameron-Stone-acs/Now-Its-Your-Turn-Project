@@ -6,24 +6,26 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     CharacterController Controller;
-    
     public float Speed;
+    public float jumpHeight = 10;
     public Transform Cam;
     public Rigidbody rb;
+    public GameObject gdobject;
+    private GroundCheck gd;
+    void Start()
+    {
+        gd = gdobject.GetComponent<GroundCheck>();
+    }
     void Update()
     {
         float Horizontal = Input.GetAxis("Horizontal") * Speed * Time.deltaTime;
         float Vertical = Input.GetAxis("Vertical") * Speed * Time.deltaTime;
         Vector3 Movement = Cam.transform.right * Horizontal + Cam.transform.forward * Vertical;
         Movement.y = 0f;
-        rb.AddForce(Movement);
-        if (Movement.magnitude != 0f)
+        if (gd.isGrounded && Input.GetAxis("Jump") > 0)
         {
-            transform.Rotate(Vector3.up * Input.GetAxis("Mouse X") * Cam.GetComponent<CameraController>().sensivity * Time.deltaTime);
-            Quaternion CamRotation = Cam.rotation;
-            CamRotation.x = 0f;
-            CamRotation.z = 0f;
-            transform.rotation = Quaternion.Lerp(transform.rotation, CamRotation, 0.1f);
-        }
+            Movement.y = jumpHeight;
+        } 
+        rb.AddForce(Movement);
     }
 }
