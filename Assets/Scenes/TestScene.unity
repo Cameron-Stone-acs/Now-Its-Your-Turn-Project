@@ -991,12 +991,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Speed: 1000
-  jumpHeight: 50
+  jumpHeight: 200
   boostMult: 2
-  airBoostMult: 1000
+  launchMult: 300
+  airBoostMult: 400
   boostTime: 10
-  boostRechargeRate: 1
-  boostDischargeRate: 2
+  boostRechargeRate: 0.5
+  boostDischargeRate: 1
   Cam: {fileID: 641429977}
   rb: {fileID: 790867970}
   gdobject: {fileID: 1762028093}
