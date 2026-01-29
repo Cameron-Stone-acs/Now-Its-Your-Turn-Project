@@ -994,6 +994,7 @@ MonoBehaviour:
   jumpHeight: 200
   boostMult: 2
   launchMult: 300
+  launchMinSpeed: 0.5
   airBoostMult: 400
   boostTime: 10
   boostRechargeRate: 0.5
@@ -1002,6 +1003,8 @@ MonoBehaviour:
   rb: {fileID: 790867970}
   gdobject: {fileID: 1762028093}
   boostCharge: 0
+  hVelocity: 0
+  vVelocity: 0
 --- !u!54 &790867970
 Rigidbody:
   m_ObjectHideFlags: 0
