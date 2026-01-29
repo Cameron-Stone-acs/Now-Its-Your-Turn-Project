@@ -4,35 +4,32 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    private const float YMin = -85.0f;
-    private const float YMax = 5.0f;
+    public float smoothingFactor = 1;
+    public float lookUpMax = 60;
+    public float lookUpMin = -60;
+    public Transform camera;
 
-    public Transform lookAt;
+    private Quaternion camRotation;
+    private RaycastHit hit;
+    private Vector3 offset;
 
-    public Transform Player;
-
-    public float distance = 10.0f;
-    private float currentX = 0.0f;
-    private float currentY = 0.0f;
-    public float sensivity = 4.0f;
-
-
-    // Start is called before the first frame update
     void Start()
     {
+        camRotation = camera.localRotation;
+        offset = camera.localPosition;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
-
-    // Update is called once per frame
     void LateUpdate()
     {
-        currentX += Input.GetAxis("Mouse X") * sensivity * Time.deltaTime;
-        currentY += Input.GetAxis("Mouse Y") * sensivity * Time.deltaTime;
-        currentY = Mathf.Clamp(currentY, YMin, YMax);
-        Vector3 Direction = new Vector3(0, 0, -distance);
-        Quaternion rotation = Quaternion.Euler(currentY * -1, currentX, 0);
-        transform.position = lookAt.position + rotation * Direction;
-        transform.LookAt(lookAt.position);
+        camRotation.x += Input.GetAxis("Mouse Y") * smoothingFactor * -1;
+        camRotation.y += Input.GetAxis("Mouse X") * smoothingFactor;
+        camRotation.x = Mathf.Clamp(camRotation.x, lookUpMax, lookUpMin);
+        transform.localRotation = Quaternion.Euler(camRotation.x, camRotation.y, camRotation.z);
+        if (Physics.Linecast(transform.position, transform.position + transform.localRotation * offset, out hit))
+        {
+            camera.localPosition = new Vector3(0, 0, -Vector3.Distance(transform.position, hit.point));
+        }
+        else camera.localPosition = Vector3.Lerp(camera.localPosition, offset, Time.deltaTime);
     }
 }

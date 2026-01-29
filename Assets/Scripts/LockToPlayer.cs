@@ -5,7 +5,7 @@ using UnityEngine;
 public class LockToPlayer : MonoBehaviour
 {
     public GameObject player;
-    void LateUpdate()
+    void Update()
     {
         this.transform.position = player.transform.position;
     }

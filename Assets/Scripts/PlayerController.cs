@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour
@@ -9,6 +8,7 @@ public class PlayerController : MonoBehaviour
     public float Speed;
     public float jumpHeight = 10f;
     public float boostMult = 2f;
+    public float airBoostMult = 5f;
     public float boostTime = 10f;
     public float boostRechargeRate = 0.1f;
     public float boostDischargeRate = 2f;
@@ -16,37 +16,45 @@ public class PlayerController : MonoBehaviour
     public Rigidbody rb;
     public GameObject gdobject;
     private GroundCheck gd;
-    private float boostcharge = 0;
-    private bool Delay = false;
+    public float boostCharge = 0;
+    private bool delay = false;
+    private bool airBoostUsed = false;
     
     void Start()
     {
         gd = gdobject.GetComponent<GroundCheck>();
-        boostcharge = boostTime;
+        boostCharge = boostTime;
     }
-    void Update()
+    void LateUpdate()
     {
         float Horizontal;
         float Vertical;
-        
+        if (airBoostUsed && gd.isGrounded) airBoostUsed = false;
         if (Mathf.Lerp(90, rb.velocity.magnitude * 10, 0.1f) > 145) Camera.main.fieldOfView = 145;
         else Camera.main.fieldOfView = Mathf.Lerp(90, rb.velocity.magnitude * 10, 0.1f);
-        if (boostcharge <= 0) Delay = true;
-        if (boostcharge >= boostTime && Delay) Delay = false;
-        if (Input.GetAxis("Boost") > 0 && boostcharge > 0 & gd.isGrounded && !Delay)
+        if (boostCharge <= 0) delay = true;
+        if (boostCharge >= boostTime && delay) delay = false;
+        if (Input.GetAxis("Boost") > 0 && boostCharge > 0 & gd.isGrounded && !delay)
         {
             Horizontal = Input.GetAxis("Horizontal") * Speed * Time.deltaTime * boostMult;
-            Vertical = Input.GetAxis("Vertical") * Speed * Time.deltaTime * boostTime;
-            boostcharge -= Time.deltaTime * boostDischargeRate;
+            Vertical = Input.GetAxis("Vertical") * Speed * Time.deltaTime * boostMult;
+            boostCharge -= Time.deltaTime * boostDischargeRate;
         }
         else 
         {
             Horizontal = Input.GetAxis("Horizontal") * Speed * Time.deltaTime;
             Vertical = Input.GetAxis("Vertical") * Speed * Time.deltaTime;
-            if (boostcharge < boostTime) boostcharge += Time.deltaTime * boostRechargeRate;
+            if (boostCharge < boostTime) boostCharge += Time.deltaTime * boostRechargeRate;
         }
         Vector3 Movement = Cam.transform.right * Horizontal + Cam.transform.forward * Vertical;
         Movement.y = 0f;
+        if (Input.GetAxis("Boost") > 0 && Input.GetAxis("Jump") <= 0 && !gd.isGrounded && boostCharge >= boostTime / 2 && !airBoostUsed && !delay)
+        {
+            boostCharge -= boostTime/2;
+            Vertical = 1 * Speed * Time.deltaTime * airBoostMult;
+            Movement = Cam.transform.right * Horizontal + Cam.transform.forward * Vertical;
+            airBoostUsed = true;
+        }
         if (gd.isGrounded && Input.GetAxis("Jump") > 0)
         {
             Movement.y = jumpHeight;

@@ -8,6 +8,12 @@ TagManager:
   - Wall(No Movement)
   - Wall
   - Game Manager
+  - CollisionUp
+  - CollisionDown
+  - CollisionLeft
+  - CollisionRight
+  - CollisionForward
+  - CollisionBack
   layers:
   - Default
   - TransparentFX
