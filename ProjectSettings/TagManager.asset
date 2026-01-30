@@ -4,16 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Ground
-  - Wall(No Movement)
-  - Wall
   - Game Manager
-  - CollisionUp
-  - CollisionDown
-  - CollisionLeft
-  - CollisionRight
-  - CollisionForward
-  - CollisionBack
+  - Slanted Surface
+  - Flat Surface
+  - YouWin
   layers:
   - Default
   - TransparentFX

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GroundCheck : MonoBehaviour
 {
+    //fix ground check not updating correctly when slamming from a slop to flat ground
     public bool isGrounded;
     private void OnTriggerEnter(Collider collision)
     {

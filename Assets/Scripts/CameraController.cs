@@ -7,20 +7,21 @@ public class CameraController : MonoBehaviour
     public float smoothingFactor = 1;
     public float lookUpMax = 60;
     public float lookUpMin = -60;
-    public Transform camera;
 
-    private Quaternion camRotation;
+    public Transform camera;
+    public Quaternion camRotation;
     private RaycastHit hit;
     private Vector3 offset;
 
     void Start()
     {
+        camera = GameObject.Find("Player Camera").transform;
         camRotation = camera.localRotation;
         offset = camera.localPosition;
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
-    void LateUpdate()
+    void Update()
     {
         camRotation.x += Input.GetAxis("Mouse Y") * smoothingFactor * -1;
         camRotation.y += Input.GetAxis("Mouse X") * smoothingFactor;
